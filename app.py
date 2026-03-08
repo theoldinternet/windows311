@@ -60,10 +60,20 @@ _init_db()
 
 def _client_ip() -> str:
     """Return the real client IP, respecting X-Forwarded-For from nginx."""
+    import ipaddress
     forwarded = request.headers.get('X-Forwarded-For')
-    if forwarded:
-        return forwarded.split(',')[0].strip()
-    return request.remote_addr or '0.0.0.0'
+    raw = forwarded.split(',')[0].strip() if forwarded else (request.remote_addr or '0.0.0.0')
+    # Normalize IPv6-mapped IPv4 (e.g. ::ffff:127.0.0.1 → 127.0.0.1) and loopback
+    try:
+        addr = ipaddress.ip_address(raw)
+        if isinstance(addr, ipaddress.IPv6Address):
+            if addr.ipv4_mapped:
+                return str(addr.ipv4_mapped)
+            if addr == ipaddress.IPv6Address('::1'):
+                return '127.0.0.1'
+    except ValueError:
+        pass
+    return raw
 
 def _log_ip():
     ip = _client_ip()
