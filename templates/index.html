@@ -452,6 +452,9 @@ const DOS = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ command: cmd, cwd: this.cwd })
             });
+            if (!resp.ok) {
+                throw new Error('Server error ' + resp.status);
+            }
             const data = await resp.json();
 
             if (data.clear) { this.clearScreen(); return; }

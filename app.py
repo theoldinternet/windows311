@@ -86,7 +86,9 @@ def _check_ip_session():
     if 'ip' not in session:
         session['ip'] = ip
     elif session['ip'] != ip:
-        abort(403)
+        from flask import make_response
+        resp = make_response(jsonify({'error': 'Session IP mismatch'}), 403)
+        abort(resp)
 
 # ── QBasic interpreter pool (one per "session" — keyed by session token) ──────
 _interp_pool: dict[str, BASICInterpreter] = {}
