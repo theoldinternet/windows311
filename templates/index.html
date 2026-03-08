@@ -36,10 +36,7 @@
         <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">🔷</div>
         <div class="icon-label">QBasic</div>
     </div>
-    <div class="desktop-icon" style="top:560px; left:20px;" data-opens="about-dialog">
-        <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">❓</div>
-        <div class="icon-label">About</div>
-    </div>
+
 
     <!-- ===================================================== -->
     <!-- PROGRAM MANAGER WINDOW                                  -->
@@ -67,10 +64,6 @@
                 <div class="dropdown-item" onclick="Desktop.maximizeWindow('program-manager')">Maximize</div>
                 <div class="dropdown-item" onclick="Desktop.minimizeWindow('program-manager')">Minimize</div>
             </div>
-            <div class="menu-item" onclick="Desktop.toggleMenu('pm-help-menu', this)">Help</div>
-            <div id="pm-help-menu" class="dropdown-menu">
-                <div class="dropdown-item" onclick="Desktop.openWindow('about-dialog')">About Windows...</div>
-            </div>
         </div>
         <div class="win-content" style="flex-direction:row; flex-wrap:wrap; padding:8px; align-content:flex-start; overflow-y:auto;">
             <div class="program-group" ondblclick="Desktop.openWindow('notepad-app')">
@@ -84,10 +77,6 @@
             <div class="program-group" ondblclick="Desktop.openWindow('file-manager')">
                 <div class="group-icon">📁</div>
                 <div class="group-label">File Manager</div>
-            </div>
-            <div class="program-group" ondblclick="Desktop.openWindow('about-dialog')">
-                <div class="group-icon">❓</div>
-                <div class="group-label">About</div>
             </div>
             <div class="program-group" ondblclick="Desktop.openWindow('msdos-app')">
                 <div class="group-icon">💻</div>
@@ -127,10 +116,6 @@
             <div id="np-edit-menu" class="dropdown-menu">
                 <div class="dropdown-item" onclick="document.execCommand('selectAll')">Select All</div>
                 <div class="dropdown-item" onclick="document.getElementById('notepad-textarea').value=''">Clear All</div>
-            </div>
-            <div class="menu-item" onclick="Desktop.toggleMenu('np-help-menu', this)">Help</div>
-            <div id="np-help-menu" class="dropdown-menu">
-                <div class="dropdown-item" onclick="Desktop.openWindow('about-dialog')">About Notepad...</div>
             </div>
         </div>
         <div class="win-content">
@@ -200,10 +185,6 @@
             <div class="title-btn" onclick="Desktop.closeWindow('calculator-app')" title="Close">✕</div>
         </div>
         <div class="menu-bar">
-            <div class="menu-item" onclick="Desktop.toggleMenu('calc-help-menu', this)">Help</div>
-            <div id="calc-help-menu" class="dropdown-menu">
-                <div class="dropdown-item" onclick="Desktop.openWindow('about-dialog')">About Calculator...</div>
-            </div>
         </div>
         <div class="win-content" id="calculator-app" style="padding:8px; gap:4px;">
             <div class="calc-display" id="calc-display">0</div>
@@ -238,30 +219,6 @@
     </div>
 
     <!-- ===================================================== -->
-    <!-- ABOUT DIALOG                                            -->
-    <!-- ===================================================== -->
-    <div id="about-dialog" class="win-window minimized" style="top:150px; left:250px; width:340px; height:260px;">
-        <div class="title-bar">
-            <div class="icon-img title-bar-icon" style="font-size:12px;">❓</div>
-            <div class="title-bar-text">About Windows 3.11</div>
-            <div class="title-btn" onclick="Desktop.closeWindow('about-dialog')" title="Close">✕</div>
-        </div>
-        <div class="win-content" style="padding:16px; align-items:center; justify-content:center; gap:10px;">
-            <div style="font-size:44px; text-align:center;">🪟</div>
-            <div style="font-size:16px; font-weight:bold; text-align:center;">Microsoft Windows</div>
-            <div style="font-size:13px; font-weight:bold; text-align:center;">Version 3.11 for Workgroups</div>
-            <div style="width:100%; height:1px; background:#808080; border-bottom:1px solid #fff;"></div>
-            <div style="font-size:11px; text-align:center; line-height:1.6;">
-                This product is licensed to:<br>
-                <strong>Windows 3.11 Desktop</strong><br>
-                Built with Flask &amp; HTML5<br>
-                &copy; 1992–1994 Microsoft Corporation
-            </div>
-            <div style="margin-top:4px;">
-                <button class="dialog-btn default" onclick="Desktop.closeWindow('about-dialog')">OK</button>
-            </div>
-        </div>
-    </div>
 
     <!-- ===================================================== -->
     <!-- MS-DOS PROMPT WINDOW                                    -->
@@ -333,8 +290,6 @@
             <div class="menu-item" onclick="Desktop.toggleMenu('qb-help-menu', this)">Help</div>
             <div id="qb-help-menu" class="dropdown-menu">
                 <div class="dropdown-item" onclick="QBasic.showHelp()">Quick Reference</div>
-                <div class="dropdown-separator"></div>
-                <div class="dropdown-item" onclick="Desktop.openWindow('about-dialog')">About QBasic...</div>
             </div>
         </div>
         <!-- Editor with syntax-highlight overlay -->
