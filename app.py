@@ -126,13 +126,13 @@ _seed_dos_root()
 # ── Path helpers ─────────────────────────────────────────────────────────────
 
 def _dos_cwd_to_real(dos_cwd: str) -> str:
-    rel = dos_cwd.lstrip('C:').lstrip('c:').lstrip('\\').lstrip('/')
+    rel = dos_cwd.upper().lstrip('C:').lstrip('\\').lstrip('/')
     return os.path.normpath(os.path.join(DOS_ROOT, rel.replace('\\', os.sep))) if rel else DOS_ROOT
 
 def _resolve(dos_cwd: str, dos_path: str):
     """Resolve a DOS path argument to a real path, sandboxed to DOS_ROOT."""
-    p = dos_path.strip('"\'')
-    if p.upper().startswith('C:\\') or p.upper().startswith('C:/'):
+    p = dos_path.strip('"\'').upper()
+    if p.startswith('C:\\') or p.startswith('C:/'):
         rel = p[3:].replace('\\', os.sep).replace('/', os.sep)
         real = os.path.normpath(os.path.join(DOS_ROOT, rel))
     elif p.startswith('\\') or p.startswith('/'):
@@ -1108,8 +1108,8 @@ def run_dos_command(raw: str, dos_cwd: str):
 
 def _resolve_absolute(dos_path: str):
     """Resolve a full DOS path like C:\\DOCS\\FILE.TXT to a real sandboxed path."""
-    p = dos_path.strip()
-    if p.upper().startswith('C:\\') or p.upper().startswith('C:/'):
+    p = dos_path.strip().upper()
+    if p.startswith('C:\\') or p.startswith('C:/'):
         rel = p[3:].replace('\\', os.sep).replace('/', os.sep)
         real = os.path.normpath(os.path.join(DOS_ROOT, rel)) if rel else DOS_ROOT
     elif p in ('C:', 'C://', 'C:\\\\'):
