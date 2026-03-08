@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 3.11</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- ===== DESKTOP ===== -->
+<div id="desktop">
+
+    <!-- Desktop Icons -->
+    <div class="desktop-icon" style="top:20px; left:20px;" data-opens="program-manager">
+        <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">🖥️</div>
+        <div class="icon-label">Program<br>Manager</div>
+    </div>
+    <div class="desktop-icon" style="top:110px; left:20px;" data-opens="file-manager">
+        <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">📁</div>
+        <div class="icon-label">File<br>Manager</div>
+    </div>
+    <div class="desktop-icon" style="top:200px; left:20px;" data-opens="notepad-app">
+        <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">📝</div>
+        <div class="icon-label">Notepad</div>
+    </div>
+    <div class="desktop-icon" style="top:290px; left:20px;" data-opens="calculator-app">
+        <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">🧮</div>
+        <div class="icon-label">Calculator</div>
+    </div>
+    <div class="desktop-icon" style="top:380px; left:20px;" data-opens="msdos-app">
+        <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">💻</div>
+        <div class="icon-label">MS-DOS<br>Prompt</div>
+    </div>
+    <div class="desktop-icon" style="top:470px; left:20px;" data-opens="qbasic-app">
+        <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">🔷</div>
+        <div class="icon-label">QBasic</div>
+    </div>
+    <div class="desktop-icon" style="top:560px; left:20px;" data-opens="about-dialog">
+        <div class="icon-img" style="font-size:28px; display:flex; align-items:center; justify-content:center;">❓</div>
+        <div class="icon-label">About</div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- PROGRAM MANAGER WINDOW                                  -->
+    <!-- ===================================================== -->
+    <div id="program-manager" class="win-window minimized" style="top:40px; left:80px; width:520px; height:320px;">
+        <div class="title-bar">
+            <div class="icon-img title-bar-icon" style="font-size:12px;">🖥️</div>
+            <div class="title-bar-text">Program Manager</div>
+            <div class="title-btn" onclick="Desktop.minimizeWindow('program-manager')" title="Minimize">▼</div>
+            <div class="title-btn" onclick="Desktop.maximizeWindow('program-manager')" title="Maximize">▲</div>
+            <div class="title-btn" onclick="Desktop.closeWindow('program-manager')" title="Close">✕</div>
+        </div>
+        <div class="menu-bar">
+            <div class="menu-item" onclick="Desktop.toggleMenu('pm-file-menu', this)">File</div>
+            <div id="pm-file-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="Desktop.openWindow('notepad-app')">Open Notepad</div>
+                <div class="dropdown-item" onclick="Desktop.openWindow('calculator-app')">Open Calculator</div>
+                <div class="dropdown-item" onclick="Desktop.openWindow('file-manager')">Open File Manager</div>
+                <div class="dropdown-item" onclick="Desktop.openWindow('qbasic-app')">Open QBasic</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="Desktop.closeWindow('program-manager')">Close</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('pm-window-menu', this)">Window</div>
+            <div id="pm-window-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="Desktop.maximizeWindow('program-manager')">Maximize</div>
+                <div class="dropdown-item" onclick="Desktop.minimizeWindow('program-manager')">Minimize</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('pm-help-menu', this)">Help</div>
+            <div id="pm-help-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="Desktop.openWindow('about-dialog')">About Windows...</div>
+            </div>
+        </div>
+        <div class="win-content" style="flex-direction:row; flex-wrap:wrap; padding:8px; align-content:flex-start; overflow-y:auto;">
+            <div class="program-group" ondblclick="Desktop.openWindow('notepad-app')">
+                <div class="group-icon">📝</div>
+                <div class="group-label">Notepad</div>
+            </div>
+            <div class="program-group" ondblclick="Desktop.openWindow('calculator-app')">
+                <div class="group-icon">🧮</div>
+                <div class="group-label">Calculator</div>
+            </div>
+            <div class="program-group" ondblclick="Desktop.openWindow('file-manager')">
+                <div class="group-icon">📁</div>
+                <div class="group-label">File Manager</div>
+            </div>
+            <div class="program-group" ondblclick="Desktop.openWindow('about-dialog')">
+                <div class="group-icon">❓</div>
+                <div class="group-label">About</div>
+            </div>
+            <div class="program-group" ondblclick="Desktop.openWindow('msdos-app')">
+                <div class="group-icon">💻</div>
+                <div class="group-label">MS-DOS Prompt</div>
+            </div>
+            <div class="program-group" ondblclick="Desktop.openWindow('qbasic-app')">
+                <div class="group-icon">🔷</div>
+                <div class="group-label">QBasic</div>
+            </div>
+            <div class="program-group" ondblclick="alert('Solitaire\nComing soon!')">
+                <div class="group-icon">🃏</div>
+                <div class="group-label">Solitaire</div>
+            </div>
+            <div class="program-group" ondblclick="alert('Minesweeper\nComing soon!')">
+                <div class="group-icon">💣</div>
+                <div class="group-label">Minesweeper</div>
+            </div>
+            <div class="program-group" ondblclick="alert('Control Panel\nComing soon!')">
+                <div class="group-icon">⚙️</div>
+                <div class="group-label">Control Panel</div>
+            </div>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- NOTEPAD WINDOW                                          -->
+    <!-- ===================================================== -->
+    <div id="notepad-app" class="win-window minimized" style="top:80px; left:140px; width:420px; height:320px;">
+        <div class="title-bar">
+            <div class="icon-img title-bar-icon" style="font-size:12px;">📝</div>
+            <div class="title-bar-text">Notepad - untitled.txt</div>
+            <div class="title-btn" onclick="Desktop.minimizeWindow('notepad-app')" title="Minimize">▼</div>
+            <div class="title-btn" onclick="Desktop.maximizeWindow('notepad-app')" title="Maximize">▲</div>
+            <div class="title-btn" onclick="Desktop.closeWindow('notepad-app')" title="Close">✕</div>
+        </div>
+        <div class="menu-bar">
+            <div class="menu-item" onclick="Desktop.toggleMenu('np-file-menu', this)">File</div>
+            <div id="np-file-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="Notepad.new()">New</div>
+                <div class="dropdown-item" onclick="Notepad.showOpenDialog()">Open...</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="Notepad.save()">Save</div>
+                <div class="dropdown-item" onclick="Notepad.saveAs()">Save As...</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="Desktop.closeWindow('notepad-app')">Exit</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('np-edit-menu', this)">Edit</div>
+            <div id="np-edit-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="document.execCommand('selectAll')">Select All</div>
+                <div class="dropdown-item" onclick="document.getElementById('notepad-textarea').value=''">Clear All</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('np-help-menu', this)">Help</div>
+            <div id="np-help-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="Desktop.openWindow('about-dialog')">About Notepad...</div>
+            </div>
+        </div>
+        <div class="win-content">
+            <textarea id="notepad-textarea" spellcheck="false"
+                oninput="Notepad.updateStatus()"
+                placeholder="Type here..."></textarea>
+        </div>
+        <div class="status-bar">
+            <div class="status-panel">Ln 1 | Ch 0</div>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- FILE MANAGER WINDOW                                     -->
+    <!-- ===================================================== -->
+    <div id="file-manager" class="win-window minimized" style="top:60px; left:160px; width:480px; height:340px;">
+        <div class="title-bar">
+            <div class="icon-img title-bar-icon" style="font-size:12px;">📁</div>
+            <div class="title-bar-text">File Manager</div>
+            <div class="title-btn" onclick="Desktop.minimizeWindow('file-manager')" title="Minimize">▼</div>
+            <div class="title-btn" onclick="Desktop.maximizeWindow('file-manager')" title="Maximize">▲</div>
+            <div class="title-btn" onclick="Desktop.closeWindow('file-manager')" title="Close">✕</div>
+        </div>
+        <div class="menu-bar">
+            <div class="menu-item" onclick="Desktop.toggleMenu('fm-file-menu', this)">File</div>
+            <div id="fm-file-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="FileManager.openSelected()">Open</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="FileManager.newTextFile()">New Text File...</div>
+                <div class="dropdown-item" onclick="FileManager.newFolder()">New Folder...</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="FileManager.deleteSelected()">Delete</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="Desktop.closeWindow('file-manager')">Exit</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('fm-view-menu', this)">View</div>
+            <div id="fm-view-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="FileManager.refresh()">Refresh</div>
+            </div>
+        </div>
+        <div class="win-content" style="padding:4px; flex-direction:column;">
+            <div class="file-manager-toolbar">
+                <button class="toolbar-btn" onclick="FileManager.goUp()">&#8593; Up</button>
+                <button class="toolbar-btn" onclick="FileManager.refresh()">&#8635; Refresh</button>
+                <span style="font-size:11px; padding:0 6px; align-self:center;" id="fm-path-label">C:\</span>
+            </div>
+            <div class="file-manager-panes" style="flex:1; overflow:hidden; min-height:0;">
+                <div class="file-pane" id="fm-tree" style="width:38%; flex-shrink:0; overflow-y:auto;"></div>
+                <div class="file-pane" id="fm-files" style="flex:1; overflow-y:auto;"></div>
+            </div>
+        </div>
+        <div class="status-bar">
+            <div class="status-panel" id="fm-status">Ready</div>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- CALCULATOR WINDOW                                       -->
+    <!-- ===================================================== -->
+    <div id="calculator-app" class="win-window minimized" style="top:100px; left:200px; width:220px; height:280px;">
+        <div class="title-bar">
+            <div class="icon-img title-bar-icon" style="font-size:12px;">🧮</div>
+            <div class="title-bar-text">Calculator</div>
+            <div class="title-btn" onclick="Desktop.minimizeWindow('calculator-app')" title="Minimize">▼</div>
+            <div class="title-btn" onclick="Desktop.closeWindow('calculator-app')" title="Close">✕</div>
+        </div>
+        <div class="menu-bar">
+            <div class="menu-item" onclick="Desktop.toggleMenu('calc-help-menu', this)">Help</div>
+            <div id="calc-help-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="Desktop.openWindow('about-dialog')">About Calculator...</div>
+            </div>
+        </div>
+        <div class="win-content" id="calculator-app" style="padding:8px; gap:4px;">
+            <div class="calc-display" id="calc-display">0</div>
+            <div class="calc-grid">
+                <!-- Row 1 -->
+                <div class="calc-btn operator" onclick="Calculator.press('CE')">CE</div>
+                <div class="calc-btn operator" onclick="Calculator.press('C')">C</div>
+                <div class="calc-btn operator" onclick="Calculator.press('%')">%</div>
+                <div class="calc-btn operator" onclick="Calculator.press('/')">÷</div>
+                <!-- Row 2 -->
+                <div class="calc-btn" onclick="Calculator.press('7')">7</div>
+                <div class="calc-btn" onclick="Calculator.press('8')">8</div>
+                <div class="calc-btn" onclick="Calculator.press('9')">9</div>
+                <div class="calc-btn operator" onclick="Calculator.press('*')">×</div>
+                <!-- Row 3 -->
+                <div class="calc-btn" onclick="Calculator.press('4')">4</div>
+                <div class="calc-btn" onclick="Calculator.press('5')">5</div>
+                <div class="calc-btn" onclick="Calculator.press('6')">6</div>
+                <div class="calc-btn operator" onclick="Calculator.press('-')">−</div>
+                <!-- Row 4 -->
+                <div class="calc-btn" onclick="Calculator.press('1')">1</div>
+                <div class="calc-btn" onclick="Calculator.press('2')">2</div>
+                <div class="calc-btn" onclick="Calculator.press('3')">3</div>
+                <div class="calc-btn operator" onclick="Calculator.press('+')">+</div>
+                <!-- Row 5 -->
+                <div class="calc-btn operator" onclick="Calculator.press('+/-')">+/−</div>
+                <div class="calc-btn" onclick="Calculator.press('0')">0</div>
+                <div class="calc-btn" onclick="Calculator.press('.')">.</div>
+                <div class="calc-btn equals" onclick="Calculator.press('=')">=</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- ABOUT DIALOG                                            -->
+    <!-- ===================================================== -->
+    <div id="about-dialog" class="win-window minimized" style="top:150px; left:250px; width:340px; height:260px;">
+        <div class="title-bar">
+            <div class="icon-img title-bar-icon" style="font-size:12px;">❓</div>
+            <div class="title-bar-text">About Windows 3.11</div>
+            <div class="title-btn" onclick="Desktop.closeWindow('about-dialog')" title="Close">✕</div>
+        </div>
+        <div class="win-content" style="padding:16px; align-items:center; justify-content:center; gap:10px;">
+            <div style="font-size:44px; text-align:center;">🪟</div>
+            <div style="font-size:16px; font-weight:bold; text-align:center;">Microsoft Windows</div>
+            <div style="font-size:13px; font-weight:bold; text-align:center;">Version 3.11 for Workgroups</div>
+            <div style="width:100%; height:1px; background:#808080; border-bottom:1px solid #fff;"></div>
+            <div style="font-size:11px; text-align:center; line-height:1.6;">
+                This product is licensed to:<br>
+                <strong>Windows 3.11 Desktop</strong><br>
+                Built with Flask &amp; HTML5<br>
+                &copy; 1992–1994 Microsoft Corporation
+            </div>
+            <div style="margin-top:4px;">
+                <button class="dialog-btn default" onclick="Desktop.closeWindow('about-dialog')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MS-DOS PROMPT WINDOW                                    -->
+    <!-- ===================================================== -->
+    <div id="msdos-app" class="win-window minimized" style="top:50px; left:120px; width:580px; height:380px;">
+        <div class="title-bar">
+            <div class="icon-img title-bar-icon" style="font-size:12px;">💻</div>
+            <div class="title-bar-text">MS-DOS Prompt</div>
+            <div class="title-btn" onclick="Desktop.minimizeWindow('msdos-app')" title="Minimize">▼</div>
+            <div class="title-btn" onclick="Desktop.maximizeWindow('msdos-app')" title="Maximize">▲</div>
+            <div class="title-btn" onclick="DOS.exit()" title="Close">✕</div>
+        </div>
+        <div class="menu-bar">
+            <div class="menu-item" onclick="Desktop.toggleMenu('dos-edit-menu', this)">Edit</div>
+            <div id="dos-edit-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="DOS.run('CLS')">Clear Screen (CLS)</div>
+                <div class="dropdown-item" onclick="DOS.copyOutput()">Copy Output</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('dos-help-menu', this)">Help</div>
+            <div id="dos-help-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="DOS.run('HELP')">Command Help</div>
+                <div class="dropdown-item" onclick="DOS.run('VER')">Version</div>
+            </div>
+        </div>
+        <div class="win-content" onclick="DOS.focus()">
+            <div id="dos-screen"></div>
+            <input id="dos-hidden-input" type="text" autocomplete="off" spellcheck="false"
+                   style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;">
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- QBASIC WINDOW                                           -->
+    <!-- ===================================================== -->
+    <div id="qbasic-app" class="win-window minimized" style="top:50px; left:100px; width:660px; height:500px;">
+        <div class="title-bar">
+            <div class="icon-img title-bar-icon" style="font-size:12px;">🔷</div>
+            <div class="title-bar-text">QBasic - UNTITLED.BAS</div>
+            <div class="title-btn" onclick="Desktop.minimizeWindow('qbasic-app')" title="Minimize">▼</div>
+            <div class="title-btn" onclick="Desktop.maximizeWindow('qbasic-app')" title="Maximize">▲</div>
+            <div class="title-btn" onclick="Desktop.closeWindow('qbasic-app')" title="Close">✕</div>
+        </div>
+        <div class="menu-bar">
+            <div class="menu-item" onclick="Desktop.toggleMenu('qb-file-menu', this)">File</div>
+            <div id="qb-file-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="QBasic.newFile()">New</div>
+                <div class="dropdown-item" onclick="QBasic.openDialog()">Open...</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="QBasic.save()">Save</div>
+                <div class="dropdown-item" onclick="QBasic.saveAs()">Save As...</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="Desktop.closeWindow('qbasic-app')">Exit</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('qb-run-menu', this)">Run</div>
+            <div id="qb-run-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="QBasic.run()">Start &nbsp;&nbsp;F5</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="QBasic.reset()">Reset Interpreter</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('qb-samples-menu', this)">Samples</div>
+            <div id="qb-samples-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="QBasic.loadFile('HELLO.BAS')">Hello World</div>
+                <div class="dropdown-item" onclick="QBasic.loadFile('FIZZBUZZ.BAS')">FizzBuzz</div>
+                <div class="dropdown-item" onclick="QBasic.loadFile('CALC.BAS')">Calculator</div>
+                <div class="dropdown-item" onclick="QBasic.loadFile('PRIMES.BAS')">Primes</div>
+                <div class="dropdown-item" onclick="QBasic.loadFile('SORT.BAS')">Sort</div>
+            </div>
+            <div class="menu-item" onclick="Desktop.toggleMenu('qb-help-menu', this)">Help</div>
+            <div id="qb-help-menu" class="dropdown-menu">
+                <div class="dropdown-item" onclick="QBasic.showHelp()">Quick Reference</div>
+                <div class="dropdown-separator"></div>
+                <div class="dropdown-item" onclick="Desktop.openWindow('about-dialog')">About QBasic...</div>
+            </div>
+        </div>
+        <!-- Editor with syntax-highlight overlay -->
+        <div class="qb-editor-area">
+            <pre id="qb-highlight" aria-hidden="true"></pre>
+            <textarea id="qb-editor" spellcheck="false" autocomplete="off"
+                oninput="QBasic.onEdit()"
+                onkeydown="QBasic.onKey(event)"
+                onkeyup="QBasic.updateStatus()"
+                onclick="QBasic.updateStatus()"
+                placeholder="' Type your BASIC program here&#10;' Press F5 to run"></textarea>
+        </div>
+        <!-- Divider -->
+        <div class="qb-divider">&#8212; Immediate &#8212;</div>
+        <!-- Immediate window -->
+        <div class="qb-immediate">
+            <div id="qb-output"></div>
+            <div class="qb-imm-input-row">
+                <span class="qb-imm-prompt">&#9658;</span>
+                <input id="qb-imm-input" type="text" autocomplete="off" spellcheck="false"
+                    placeholder="type a statement and press Enter"
+                    onkeydown="QBasic.onImmKey(event)">
+            </div>
+        </div>
+        <!-- Status bar -->
+        <div class="qb-status">
+            <span class="qb-status-item" id="qb-status-file">UNTITLED.BAS</span>
+            <span class="qb-status-item" id="qb-status-pos">Ln 1  Col 1</span>
+            <span class="qb-status-item right">F5=Run &nbsp; ESC=Immediate &nbsp; Tab=Indent</span>
+        </div>
+    </div>
+
+</div><!-- /desktop -->
+
+<!-- Dropdown menus rendered at root level to avoid clipping -->
+
+<script src="/static/js/desktop.js"></script>
+<script>
+// ── MS-DOS Terminal ──────────────────────────────────────────────────────────
+const DOS = {
+    cwd: 'C:\\',
+    history: [],
+    histIdx: -1,
+    currentInput: '',   // what the user is currently typing
+    lines: [],          // committed output lines [{text, cls}]
+    booted: false,
+
+    // ── DOM refs ───────────────────────────────────────────────────────────
+    get screen()      { return document.getElementById('dos-screen'); },
+    get hiddenInput() { return document.getElementById('dos-hidden-input'); },
+
+    // ── Boot ───────────────────────────────────────────────────────────────
+    boot() {
+        if (this.booted) return;
+        this.booted = true;
+        this.lines = [];
+        this.currentInput = '';
+        this._addLines(['MS-DOS Version 6.22', '\u00a9Copyright Microsoft Corp 1981-1994.', '']);
+        this._render();
+        this.focus();
+    },
+
+    focus() {
+        this.hiddenInput?.focus();
+    },
+
+    // ── Line buffer helpers ────────────────────────────────────────────────
+    _addLines(texts, cls) {
+        for (const t of texts) {
+            // Split server output that contains embedded newlines
+            for (const sl of String(t).replace(/\r/g, '').split('\n')) {
+                this.lines.push({ text: sl, cls: cls || '' });
+            }
+        }
+    },
+
+    _esc(s) {
+        return String(s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    },
+
+    // ── Rendering ─────────────────────────────────────────────────────────
+    // Full rebuild (used after CLS or on boot). Appends committed lines then
+    // the live input line.
+    _render() {
+        const scr = this.screen;
+        if (!scr) return;
+        scr.innerHTML = '';
+        for (const { text, cls } of this.lines) {
+            const d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            scr.appendChild(d);
+        }
+        this._appendInputLine(scr);
+        scr.scrollTop = scr.scrollHeight;
+    },
+
+    // Append a fresh live-input div at the bottom of the screen.
+    _appendInputLine(scr) {
+        scr = scr || this.screen;
+        const d = document.createElement('div');
+        d.id = 'dos-current-line';
+        d.innerHTML =
+            '<span>' + this._esc(this.cwd) + '&gt;</span>' +
+            '<span id="dos-typed">' + this._esc(this.currentInput) + '</span>' +
+            '<span class="dos-cursor"></span>';
+        scr.appendChild(d);
+    },
+
+    // Fast update — only rewrites the live input line, no full DOM rebuild.
+    _updateInputLine() {
+        const typed = document.getElementById('dos-typed');
+        if (typed) {
+            typed.textContent = this.currentInput;
+        } else {
+            // Input line got removed somehow — re-render
+            this._render();
+            return;
+        }
+        this.screen.scrollTop = this.screen.scrollHeight;
+    },
+
+    // ── Execute a command ──────────────────────────────────────────────────
+    async run(cmd) {
+        // Commit the prompt line (what the user typed) to the output buffer,
+        // replacing the live input line.
+        const currentLineEl = document.getElementById('dos-current-line');
+        if (currentLineEl) currentLineEl.remove();
+
+        const promptDiv = document.createElement('div');
+        promptDiv.textContent = this.cwd + '>' + cmd;
+        this.screen.appendChild(promptDiv);
+
+        // Mirror into lines[] so CLS / re-render stays consistent
+        this.lines.push({ text: this.cwd + '>' + cmd, cls: '' });
+
+        this.currentInput = '';
+        this.histIdx = -1;
+        if (cmd.trim() && this.history[0] !== cmd.trim()) {
+            this.history.unshift(cmd.trim());
+            if (this.history.length > 100) this.history.pop();
+        }
+
+        if (!cmd.trim()) {
+            this._appendInputLine();
+            this.screen.scrollTop = this.screen.scrollHeight;
+            return;
+        }
+
+        const upper = cmd.trim().toUpperCase();
+        if (upper === 'CLS')  { this.clearScreen(); return; }
+        if (upper === 'EXIT') { this.exit(); return; }
+
+        try {
+            const resp = await fetch('/api/dos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: cmd, cwd: this.cwd })
+            });
+            const data = await resp.json();
+
+            if (data.clear) { this.clearScreen(); return; }
+            if (data.exit)  { this.exit(); return; }
+
+            this.cwd = data.cwd;
+
+            // Handle meta actions
+            const meta = data.meta || {};
+            if (meta.color) {
+                this.screen.style.background = meta.color.bg;
+                this.screen.style.color      = meta.color.fg;
+                document.getElementById('msdos-app').querySelector('.win-content').style.background = meta.color.bg;
+                // Update cursor color to match fg
+                const style = document.getElementById('dos-cursor-style') || (() => {
+                    const s = document.createElement('style');
+                    s.id = 'dos-cursor-style';
+                    document.head.appendChild(s);
+                    return s;
+                })();
+                style.textContent = `.dos-cursor { background: ${meta.color.fg}; }`;
+            }
+            if (meta.title) {
+                document.querySelector('#msdos-app .title-bar-text').textContent = meta.title;
+            }
+            if (meta.edit !== undefined) {
+                if (meta.edit) {
+                    Notepad.openPath(meta.edit);
+                } else {
+                    Notepad.new();
+                }
+                Desktop.openWindow('notepad-app');
+            }
+
+            if (data.output) {
+                const isError = /^(Bad command or file name|File not found|Access denied|Invalid|The system)/i
+                    .test(data.output.trim());
+                const cls = isError ? 'dos-error' : '';
+                for (const line of data.output.replace(/\r/g, '').split('\n')) {
+                    const d = document.createElement('div');
+                    if (cls) d.className = cls;
+                    d.textContent = line;
+                    this.screen.appendChild(d);
+                    this.lines.push({ text: line, cls });
+                }
+            }
+        } catch (e) {
+            const d = document.createElement('div');
+            d.className = 'dos-error';
+            d.textContent = 'Network error: ' + e.message;
+            this.screen.appendChild(d);
+            this.lines.push({ text: 'Network error: ' + e.message, cls: 'dos-error' });
+        }
+
+        this._appendInputLine();
+        this.screen.scrollTop = this.screen.scrollHeight;
+        this.focus();
+    },
+
+    // ── CLS ────────────────────────────────────────────────────────────────
+    clearScreen() {
+        this.lines = [];
+        this.currentInput = '';
+        this._render();
+        this.focus();
+    },
+
+    // ── EXIT ───────────────────────────────────────────────────────────────
+    exit() {
+        Desktop.closeWindow('msdos-app');
+        this.booted = false;
+        this.lines = [];
+    },
+
+    copyOutput() {
+        const text = this.lines.map(l => l.text).join('\n');
+        navigator.clipboard.writeText(text).catch(() => {});
+    },
+
+    // ── Input wiring (called once per window open) ─────────────────────────
+    initInput() {
+        const inp = this.hiddenInput;
+        if (!inp || inp._dosInit) return;
+        inp._dosInit = true;
+
+        // Sync visible typed text on every character change
+        inp.addEventListener('input', () => {
+            this.currentInput = inp.value;
+            this._updateInputLine();
+        });
+
+        inp.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const cmd = this.currentInput;
+                inp.value = '';
+                this.run(cmd);
+
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (this.histIdx < this.history.length - 1) {
+                    this.histIdx++;
+                    inp.value = this.history[this.histIdx];
+                    this.currentInput = inp.value;
+                    this._updateInputLine();
+                }
+
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (this.histIdx > 0) {
+                    this.histIdx--;
+                    inp.value = this.history[this.histIdx];
+                } else {
+                    this.histIdx = -1;
+                    inp.value = '';
+                }
+                this.currentInput = inp.value;
+                this._updateInputLine();
+
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                this._tabComplete(inp);
+            }
+        });
+    },
+
+    // ── Tab completion ─────────────────────────────────────────────────────
+    async _tabComplete(inp) {
+        const parts = this.currentInput.split(' ');
+        const partial = parts[parts.length - 1];
+        if (!partial) return;
+        try {
+            const resp = await fetch('/api/dos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: 'DIR', cwd: this.cwd })
+            });
+            const data = await resp.json();
+            const names = (data.output || '').split('\n')
+                .map(l => l.trim().split(/\s+/)[0].replace(/[<>]/g, ''))
+                .filter(n => n && n.toUpperCase().startsWith(partial.toUpperCase()));
+            if (names.length === 1) {
+                parts[parts.length - 1] = names[0];
+                inp.value = parts.join(' ');
+                this.currentInput = inp.value;
+                this._updateInputLine();
+            }
+        } catch (_) {}
+    }
+};
+
+// Hook DOS boot to window open
+const _origOpen = Desktop.openWindow.bind(Desktop);
+Desktop.openWindow = function(id) {
+    _origOpen(id);
+    if (id === 'msdos-app') {
+        setTimeout(() => { DOS.initInput(); DOS.boot(); }, 50);
+    }
+};
+</script>
+<script>
+// ── File Manager ─────────────────────────────────────────────────────────────
+const FileManager = {
+    cwd: 'C:\\',
+    selected: null,   // {name, is_dir, path}
+
+    async init() {
+        await this.navigate('C:\\');
+    },
+
+    async refresh() {
+        await this.navigate(this.cwd);
+    },
+
+    async goUp() {
+        const resp = await fetch('/api/fs/list?path=' + encodeURIComponent(this.cwd));
+        const data = await resp.json();
+        if (data.parent) await this.navigate(data.parent);
+    },
+
+    async navigate(dosPath) {
+        this.cwd = dosPath;
+        this.selected = null;
+        document.getElementById('fm-path-label').textContent = dosPath;
+        document.getElementById('fm-status').textContent = dosPath;
+
+        const [treePane, filesPane] = [
+            document.getElementById('fm-tree'),
+            document.getElementById('fm-files'),
+        ];
+        filesPane.innerHTML = '<div class="file-entry" style="color:#808080;">Loading...</div>';
+
+        let data;
+        try {
+            const resp = await fetch('/api/fs/list?path=' + encodeURIComponent(dosPath));
+            data = await resp.json();
+        } catch (e) {
+            filesPane.innerHTML = '<div class="file-entry" style="color:#c00000;">Error: ' + e.message + '</div>';
+            return;
+        }
+
+        // ── Tree pane (path breadcrumb + top-level dirs) ─────────────────
+        treePane.innerHTML = '';
+        const makeTreeEntry = (label, icon, path, depth) => {
+            const d = document.createElement('div');
+            d.className = 'file-entry' + (path === dosPath ? ' fm-selected' : '');
+            d.style.paddingLeft = (4 + depth * 14) + 'px';
+            d.innerHTML = `<span class="file-entry-icon">${icon}</span> ${label}`;
+            d.onclick = () => this.navigate(path);
+            return d;
+        };
+
+        // Drive root
+        treePane.appendChild(makeTreeEntry('C:\\', '💾', 'C:\\', 0));
+
+        // Expand the path segments
+        const parts = dosPath.replace('C:\\', '').split('\\').filter(Boolean);
+        let accumulated = 'C:\\';
+        for (let i = 0; i < parts.length; i++) {
+            accumulated = accumulated.replace(/\\$/, '') + '\\' + parts[i];
+            treePane.appendChild(makeTreeEntry(parts[i], '📂', accumulated, i + 1));
+        }
+
+        // Load subdirectories of cwd to show as children
+        const dirs = data.entries.filter(e => e.is_dir);
+        for (const dir of dirs) {
+            const childPath = dosPath.replace(/\\$/, '') + '\\' + dir.name;
+            treePane.appendChild(makeTreeEntry(dir.name, '📁', childPath, parts.length + 1));
+        }
+
+        // ── Files pane ───────────────────────────────────────────────────
+        filesPane.innerHTML = '';
+
+        // ".." entry if not at root
+        if (data.parent) {
+            const up = document.createElement('div');
+            up.className = 'file-entry';
+            up.innerHTML = '<span class="file-entry-icon">📁</span> ..';
+            up.ondblclick = () => this.navigate(data.parent);
+            filesPane.appendChild(up);
+        }
+
+        if (data.entries.length === 0 && !data.parent) {
+            filesPane.innerHTML += '<div class="file-entry" style="color:#808080;">(empty)</div>';
+        }
+
+        let fileCount = 0, dirCount = 0;
+        for (const entry of data.entries) {
+            const entryPath = dosPath.replace(/\\$/, '') + '\\' + entry.name;
+            const icon = entry.is_dir ? '📁' : _fileIcon(entry.name);
+            const d = document.createElement('div');
+            d.className = 'file-entry';
+            d.dataset.path = entryPath;
+            d.dataset.isDir = entry.is_dir;
+
+            const sizeStr = entry.is_dir ? '<DIR>' : _fmtSize(entry.size);
+            d.innerHTML =
+                `<span class="file-entry-icon">${icon}</span>` +
+                `<span style="flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${entry.name}</span>` +
+                `<span style="color:#808080;font-size:10px;margin-left:4px">${sizeStr}</span>`;
+
+            d.onclick = (e) => {
+                filesPane.querySelectorAll('.file-entry.fm-selected').forEach(el => el.classList.remove('fm-selected'));
+                d.classList.add('fm-selected');
+                this.selected = { name: entry.name, is_dir: entry.is_dir, path: entryPath };
+                document.getElementById('fm-status').textContent =
+                    entry.is_dir ? entryPath : `${entry.name}  ${_fmtSize(entry.size)}  ${entry.modified}`;
+            };
+
+            d.ondblclick = () => {
+                if (entry.is_dir) {
+                    this.navigate(entryPath);
+                } else {
+                    _openFileInApp(entryPath, entry.name);
+                }
+            };
+
+            filesPane.appendChild(d);
+            entry.is_dir ? dirCount++ : fileCount++;
+        }
+
+        document.getElementById('fm-status').textContent =
+            `${fileCount} file(s), ${dirCount} dir(s)  —  ${dosPath}`;
+        document.querySelector('#file-manager .title-bar-text').textContent =
+            'File Manager - ' + dosPath;
+    },
+
+    openSelected() {
+        if (!this.selected) return;
+        if (this.selected.is_dir) this.navigate(this.selected.path);
+        else _openFileInApp(this.selected.path, this.selected.name);
+    },
+
+    async newTextFile() {
+        const name = prompt('File name:', 'NEWFILE.TXT');
+        if (!name) return;
+        const path = this.cwd.replace(/\\$/, '') + '\\' + name.toUpperCase();
+        await fetch('/api/fs/write', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ path, content: '' }),
+        });
+        await this.refresh();
+        Notepad.openPath(path);
+        Desktop.openWindow('notepad-app');
+    },
+
+    async newFolder() {
+        const name = prompt('Folder name:', 'NEWFOLDER');
+        if (!name) return;
+        const path = this.cwd.replace(/\\$/, '') + '\\' + name.toUpperCase();
+        await fetch('/api/dos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ command: 'MD ' + path, cwd: this.cwd }),
+        });
+        await this.refresh();
+    },
+
+    async deleteSelected() {
+        if (!this.selected) return;
+        if (!confirm('Delete ' + this.selected.path + '?')) return;
+        const cmd = this.selected.is_dir
+            ? 'RD /S ' + this.selected.path
+            : 'DEL ' + this.selected.path;
+        await fetch('/api/dos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ command: cmd, cwd: this.cwd }),
+        });
+        this.selected = null;
+        await this.refresh();
+    },
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function _fileIcon(name) {
+    const ext = name.split('.').pop().toUpperCase();
+    return { TXT:'📄', BAT:'⚙️', SYS:'⚙️', INI:'🔧', COM:'💾', EXE:'💾',
+             LOG:'📋', MD:'📄', CSV:'📊', BAS:'🔷' }[ext] || '📄';
+}
+
+function _fmtSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+const TEXT_EXTS = new Set(['TXT','BAT','SYS','INI','LOG','MD','CSV','CFG','ASM','PAS','C','H']);
+const BAS_EXTS  = new Set(['BAS']);
+
+function _openFileInApp(dosPath, name) {
+    const ext = name.split('.').pop().toUpperCase();
+    if (BAS_EXTS.has(ext)) {
+        QBasic.loadFile(name);
+        Desktop.openWindow('qbasic-app');
+    } else if (TEXT_EXTS.has(ext)) {
+        Notepad.openPath(dosPath);
+        Desktop.openWindow('notepad-app');
+    } else {
+        alert('Cannot open ' + name + '\nNo application is associated with this file type.');
+    }
+}
+
+// Auto-load File Manager when window opens
+const _fmOrigOpen = Desktop.openWindow.bind(Desktop);
+Desktop.openWindow = function(id) {
+    _fmOrigOpen(id);
+    if (id === 'file-manager') {
+        setTimeout(() => FileManager.init(), 50);
+    }
+    if (id === 'qbasic-app') {
+        setTimeout(() => QBasic.onEdit(), 50);
+    }
+};
+
+// ── Notepad ───────────────────────────────────────────────────────────────────
+const Notepad = {
+    dosPath: null,   // current C:\... path, or null for unsaved
+
+    new() {
+        this.dosPath = null;
+        document.getElementById('notepad-textarea').value = '';
+        this._setTitle('untitled.txt');
+        this._setStatus('New file');
+    },
+
+    async openPath(dosPath) {
+        try {
+            const resp = await fetch('/api/fs/read?path=' + encodeURIComponent(dosPath));
+            if (!resp.ok) { alert('Cannot open file.'); return; }
+            const data = await resp.json();
+            document.getElementById('notepad-textarea').value = data.content;
+            this.dosPath = data.path;
+            const name = data.path.split('\\').pop();
+            this._setTitle(name);
+            this._setStatus('Opened: ' + data.path);
+        } catch (e) {
+            alert('Error opening file: ' + e.message);
+        }
+    },
+
+    showOpenDialog() {
+        const path = prompt('Open file (DOS path):', this.dosPath || 'C:\\README.TXT');
+        if (path) this.openPath(path.toUpperCase());
+    },
+
+    async save() {
+        if (!this.dosPath) { await this.saveAs(); return; }
+        await this._writeFile(this.dosPath);
+    },
+
+    async saveAs() {
+        const path = prompt(
+            'Save as (DOS path):',
+            this.dosPath || 'C:\\DOCS\\UNTITLED.TXT'
+        );
+        if (!path) return;
+        await this._writeFile(path.toUpperCase());
+    },
+
+    async _writeFile(dosPath) {
+        const content = document.getElementById('notepad-textarea').value;
+        try {
+            const resp = await fetch('/api/fs/write', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: dosPath, content }),
+            });
+            const data = await resp.json();
+            this.dosPath = data.path;
+            const name = data.path.split('\\').pop();
+            this._setTitle(name);
+            this._setStatus('Saved: ' + data.path);
+            // Refresh File Manager if open
+            if (Desktop.windows['file-manager']) FileManager.refresh();
+        } catch (e) {
+            alert('Save failed: ' + e.message);
+        }
+    },
+
+    updateStatus() {
+        const ta = document.getElementById('notepad-textarea');
+        const lines = ta.value.split('\n').length;
+        this._setStatus('Ln ' + lines + ' | Ch ' + ta.value.length);
+    },
+
+    _setTitle(name) {
+        document.querySelector('#notepad-app .title-bar-text').textContent = 'Notepad - ' + name;
+    },
+
+    _setStatus(msg) {
+        document.querySelector('#notepad-app .status-panel').textContent = msg;
+    },
+};
+</script>
+<script>
+// ── QBasic IDE ────────────────────────────────────────────────────────────────
+const QBasic = {
+    sid: 'qb-' + Math.random().toString(36).slice(2),
+    filename: 'UNTITLED.BAS',
+    dosPath: null,
+    _pendingCode: null,
+    _pendingInputs: [],
+    _shownCount: 0,
+    _waitingInput: false,
+
+    _KEYWORDS: new Set(['PRINT','INPUT','LET','IF','THEN','ELSE','ELSEIF','END',
+        'FOR','NEXT','WHILE','WEND','DO','LOOP','UNTIL','GOTO','GOSUB','RETURN',
+        'DIM','SELECT','CASE','DATA','READ','RESTORE','SWAP','RANDOMIZE',
+        'CLS','BEEP','SLEEP','STOP','REM','AND','OR','NOT','XOR','MOD',
+        'TO','STEP','AS','STRING','INTEGER','SINGLE','DOUBLE','LONG',
+        'CALL','SUB','FUNCTION','EXIT','CONST','SHARED','STATIC','REDIM',
+        'PRESERVE','TYPE','OPEN','CLOSE','LINE']),
+
+    _FUNCTIONS: new Set(['ABS','INT','FIX','CINT','SGN','SQR','SIN','COS','TAN',
+        'ATN','LOG','EXP','RND','TIMER','LEN','ASC','CHR$','STR$','VAL',
+        'UCASE$','LCASE$','LTRIM$','RTRIM$','TRIM$','LEFT$','RIGHT$','MID$',
+        'SPACE$','STRING$','HEX$','OCT$','INSTR','DATE$','TIME$']),
+
+    get editor()   { return document.getElementById('qb-editor'); },
+    get hlPre()    { return document.getElementById('qb-highlight'); },
+    get output()   { return document.getElementById('qb-output'); },
+    get immInput() { return document.getElementById('qb-imm-input'); },
+
+    // ── Syntax highlighting ───────────────────────────────────────────────────
+    _esc(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    },
+
+    _colorize(code) {
+        return code.split('\n').map(line => {
+            let out = '';
+            let i = 0;
+            const len = line.length;
+
+            // Optional leading line number
+            const lnm = line.match(/^(\s*\d+\s)/);
+            if (lnm) {
+                out += '<span class="qb-lineno">' + this._esc(lnm[0]) + '</span>';
+                i = lnm[0].length;
+            }
+
+            while (i < len) {
+                const ch = line[i];
+
+                // String literal
+                if (ch === '"') {
+                    let j = i + 1;
+                    while (j < len && line[j] !== '"') j++;
+                    if (j < len) j++;
+                    out += '<span class="qb-str">' + this._esc(line.slice(i, j)) + '</span>';
+                    i = j;
+                    continue;
+                }
+
+                // Line comment ' apostrophe
+                if (ch === "'") {
+                    out += '<span class="qb-rem">' + this._esc(line.slice(i)) + '</span>';
+                    break;
+                }
+
+                // Word token
+                if (/[A-Za-z_]/.test(ch)) {
+                    let j = i;
+                    while (j < len && /[A-Za-z0-9_$]/.test(line[j])) j++;
+                    const word = line.slice(i, j);
+                    const upper = word.toUpperCase();
+
+                    if (upper === 'REM') {
+                        out += '<span class="qb-rem">' + this._esc(line.slice(i)) + '</span>';
+                        i = len;
+                        break;
+                    }
+                    if (this._KEYWORDS.has(upper)) {
+                        out += '<span class="qb-kw">' + this._esc(word) + '</span>';
+                    } else if (this._FUNCTIONS.has(upper)) {
+                        out += '<span class="qb-fn">' + this._esc(word) + '</span>';
+                    } else {
+                        out += this._esc(word);
+                    }
+                    i = j;
+                    continue;
+                }
+
+                // Number
+                if (/[0-9]/.test(ch) || (ch === '.' && i+1 < len && /[0-9]/.test(line[i+1]))) {
+                    let j = i;
+                    while (j < len && /[0-9.]/.test(line[j])) j++;
+                    if (j < len && /[eE]/.test(line[j])) {
+                        j++;
+                        if (j < len && /[+-]/.test(line[j])) j++;
+                        while (j < len && /[0-9]/.test(line[j])) j++;
+                    }
+                    out += '<span class="qb-num">' + this._esc(line.slice(i, j)) + '</span>';
+                    i = j;
+                    continue;
+                }
+
+                out += this._esc(ch);
+                i++;
+            }
+            return out;
+        }).join('\n');
+    },
+
+    // ── Editor sync ──────────────────────────────────────────────────────────
+    onEdit() {
+        const code = this.editor ? this.editor.value : '';
+        if (this.hlPre) {
+            this.hlPre.innerHTML = this._colorize(code) + '\n';
+            this.hlPre.scrollTop  = this.editor.scrollTop;
+            this.hlPre.scrollLeft = this.editor.scrollLeft;
+        }
+        this.updateStatus();
+    },
+
+    updateStatus() {
+        const ta = this.editor;
+        if (!ta) return;
+        const before = ta.value.slice(0, ta.selectionStart);
+        const lines  = before.split('\n');
+        document.getElementById('qb-status-pos').textContent =
+            'Ln ' + lines.length + '  Col ' + (lines[lines.length-1].length + 1);
+        document.getElementById('qb-status-file').textContent = this.filename;
+    },
+
+    // ── Key handlers ─────────────────────────────────────────────────────────
+    onKey(e) {
+        if (e.key === 'F5') {
+            e.preventDefault();
+            this.run();
+        } else if (e.key === 'Tab') {
+            e.preventDefault();
+            const ta = this.editor;
+            const s  = ta.selectionStart;
+            ta.value = ta.value.slice(0, s) + '    ' + ta.value.slice(ta.selectionEnd);
+            ta.selectionStart = ta.selectionEnd = s + 4;
+            this.onEdit();
+        } else if (e.key === 'Escape') {
+            this.immInput && this.immInput.focus();
+        }
+    },
+
+    onImmKey(e) {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        const val = this.immInput.value.trim();
+        this.immInput.value = '';
+
+        if (this._waitingInput) {
+            this._addOutput(val, 'qb-out-input');
+            this._pendingInputs.push(val);
+            this._continueRun();
+        } else {
+            if (!val) return;
+            this._addOutput('\u25b6 ' + val, 'qb-out-sys');
+            this.runImmediate(val);
+        }
+    },
+
+    // ── Output helpers ────────────────────────────────────────────────────────
+    _addOutput(text, cls) {
+        const out = this.output;
+        for (const line of String(text).split('\n')) {
+            const d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = line;
+            out.appendChild(d);
+        }
+        out.scrollTop = out.scrollHeight;
+    },
+
+    _clearOutput() { this.output.innerHTML = ''; },
+
+    // ── Run program ──────────────────────────────────────────────────────────
+    async run() {
+        this._clearOutput();
+        this._pendingCode   = this.editor.value;
+        this._pendingInputs = [];
+        this._shownCount    = 0;
+        this._waitingInput  = false;
+        this._addOutput('Running\u2026', 'qb-out-sys');
+        await this._continueRun();
+    },
+
+    async _continueRun() {
+        try {
+            const resp = await fetch('/api/qbasic/run', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    code:   this._pendingCode,
+                    inputs: this._pendingInputs,
+                    sid:    this.sid
+                })
+            });
+            const data = await resp.json();
+            const lines = data.output || [];
+
+            // Only show lines we haven't shown yet
+            for (let i = this._shownCount; i < lines.length; i++) {
+                this._addOutput(lines[i], 'qb-out-normal');
+            }
+            this._shownCount = lines.length;
+
+            if (data.needs_input) {
+                this._waitingInput = true;
+                this._addOutput((data.prompt || '?') + ' ', 'qb-out-input');
+                this.immInput && this.immInput.focus();
+            } else {
+                this._waitingInput = false;
+                this._addOutput('\u2014 Program complete \u2014', 'qb-out-sys');
+                this.immInput && this.immInput.focus();
+            }
+        } catch (e) {
+            this._addOutput('Network error: ' + e.message, 'qb-out-error');
+        }
+    },
+
+    // ── Immediate statement ──────────────────────────────────────────────────
+    async runImmediate(stmt) {
+        try {
+            const resp = await fetch('/api/qbasic/immediate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({stmt, sid: this.sid, inputs: []})
+            });
+            const data = await resp.json();
+            for (const line of (data.output || [])) this._addOutput(line, 'qb-out-normal');
+            if (data.needs_input) {
+                this._addOutput((data.prompt || '?') + ' ', 'qb-out-input');
+                this._waitingInput = true;
+                this._pendingCode  = stmt;
+                this._pendingInputs = [];
+                this._shownCount    = 0;
+            }
+        } catch (e) {
+            this._addOutput('Error: ' + e.message, 'qb-out-error');
+        }
+    },
+
+    // ── File operations ──────────────────────────────────────────────────────
+    async reset() {
+        try {
+            await fetch('/api/qbasic/reset', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({sid: this.sid})
+            });
+        } catch (_) {}
+        this._waitingInput = false;
+        this._clearOutput();
+        this._addOutput('Interpreter reset.', 'qb-out-sys');
+    },
+
+    newFile() {
+        this.editor.value = '';
+        this.filename = 'UNTITLED.BAS';
+        this.dosPath  = null;
+        this.onEdit();
+        this._clearOutput();
+        this._setTitle('UNTITLED.BAS');
+    },
+
+    async openDialog() {
+        try {
+            const resp  = await fetch('/api/qbasic/files');
+            const data  = await resp.json();
+            const files = data.files || [];
+            const name  = prompt(
+                'Open BASIC file:\n\nFiles in C:\\QBASIC\\:\n' + (files.join('\n') || '(none)'),
+                files[0] || 'UNTITLED.BAS'
+            );
+            if (name) await this.loadFile(name.trim());
+        } catch (e) {
+            alert('Error: ' + e.message);
+        }
+    },
+
+    async loadFile(filename) {
+        try {
+            const resp = await fetch('/api/qbasic/load?file=' + encodeURIComponent(filename));
+            if (!resp.ok) { alert('File not found: ' + filename); return; }
+            const data = await resp.json();
+            this.editor.value = data.code;
+            this.filename     = data.filename;
+            this.dosPath      = 'C:\\QBASIC\\' + data.filename;
+            this.onEdit();
+            this._clearOutput();
+            this._addOutput('Loaded: ' + data.filename, 'qb-out-sys');
+            this._setTitle(data.filename);
+        } catch (e) {
+            alert('Error loading file: ' + e.message);
+        }
+    },
+
+    async save() { await this._saveFile(this.filename); },
+
+    async saveAs() {
+        const name = prompt('Save as:', this.filename);
+        if (name) await this._saveFile(name.trim());
+    },
+
+    async _saveFile(filename) {
+        try {
+            const resp = await fetch('/api/qbasic/save', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({code: this.editor.value, filename, sid: this.sid})
+            });
+            const data = await resp.json();
+            this.filename = data.filename;
+            this.dosPath  = data.path;
+            this._addOutput('Saved: ' + data.path, 'qb-out-sys');
+            this._setTitle(data.filename);
+            if (Desktop.windows['file-manager']) FileManager.refresh();
+        } catch (e) {
+            alert('Save failed: ' + e.message);
+        }
+    },
+
+    _setTitle(name) {
+        document.querySelector('#qbasic-app .title-bar-text').textContent = 'QBasic - ' + name;
+        document.getElementById('qb-status-file').textContent = name;
+    },
+
+    // ── Help ─────────────────────────────────────────────────────────────────
+    showHelp() {
+        this._clearOutput();
+        const lines = [
+            'QBasic Quick Reference',
+            '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500',
+            'PRINT expr[;expr]    Display values (; = no newline)',
+            'INPUT ["prompt",] v  Get user input',
+            'LET var = expr       Assign (LET optional)',
+            'IF cond THEN ...     Conditional (single or multi-line)',
+            'FOR i=1 TO n STEP s  Counted loop',
+            'WHILE cond / WEND    While loop',
+            'DO [WHILE/UNTIL c] / LOOP [WHILE/UNTIL c]',
+            'GOTO label/line      Jump',
+            'GOSUB label / RETURN Subroutine call',
+            'DIM arr(n)           Declare array',
+            'SELECT CASE x / CASE v / END SELECT',
+            'DATA v,v / READ v / RESTORE',
+            'REM or \'             Comment',
+            'END                  End program',
+            '',
+            'Math: ABS INT FIX SQR SIN COS TAN ATN LOG EXP RND',
+            'Str:  LEN MID$ LEFT$ RIGHT$ CHR$ STR$ VAL UCASE$ LCASE$',
+            'Misc: INSTR SPACE$ STRING$ HEX$ OCT$ TIMER DATE$ TIME$',
+            '',
+            'Press F5 to run.  Use Immediate window to test expressions.',
+        ];
+        lines.forEach(l => this._addOutput(l, 'qb-out-sys'));
+    },
+};
+</script>
+</body>
+</html>

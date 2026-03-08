@@ -1,0 +1,765 @@
+/* ===== QBASIC IDE ===== */
+
+#qbasic-app .win-content {
+    flex-direction: column;
+    overflow: hidden;
+    background: #0000aa;
+    padding: 0;
+}
+
+.qb-editor-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Highlight layer sits behind the textarea */
+#qb-highlight {
+    position: absolute;
+    inset: 0;
+    padding: 4px 8px;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: pre;
+    overflow: auto;
+    pointer-events: none;
+    background: #0000aa;
+    color: #ffffff;
+    border: none;
+    margin: 0;
+    tab-size: 4;
+}
+
+#qb-editor {
+    position: absolute;
+    inset: 0;
+    padding: 4px 8px;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: pre;
+    overflow: auto;
+    background: transparent;
+    color: transparent;
+    caret-color: #ffffff;
+    border: none;
+    outline: none;
+    resize: none;
+    tab-size: 4;
+    z-index: 2;
+    spellcheck: false;
+}
+
+/* Syntax highlight colours */
+.qb-kw    { color: #ffff55; font-weight: bold; }  /* keywords */
+.qb-str   { color: #55ffff; }                      /* strings  */
+.qb-num   { color: #ff55ff; }                      /* numbers  */
+.qb-rem   { color: #55ff55; font-style: italic; }  /* comments */
+.qb-lineno{ color: #aaaaaa; }                      /* line nos */
+.qb-fn    { color: #ff9955; }                      /* functions*/
+
+/* Divider bar between editor and immediate window */
+.qb-divider {
+    background: #aaaaaa;
+    color: #000000;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 1px 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    user-select: none;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #555555;
+}
+
+/* Immediate / output window */
+.qb-immediate {
+    height: 160px;
+    min-height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background: #0000aa;
+    overflow: hidden;
+}
+
+#qb-output {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2px 8px;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #ffffff;
+    white-space: pre-wrap;
+    word-break: break-all;
+    background: #0000aa;
+}
+
+#qb-output::-webkit-scrollbar       { width: 10px; }
+#qb-output::-webkit-scrollbar-track { background: #000055; }
+#qb-output::-webkit-scrollbar-thumb { background: #5555aa; }
+
+.qb-imm-input-row {
+    display: flex;
+    align-items: center;
+    padding: 1px 6px 3px;
+    background: #0000aa;
+    flex-shrink: 0;
+}
+
+.qb-imm-prompt {
+    color: #ffffff;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+#qb-imm-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    caret-color: #ffffff;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 14px;
+}
+
+/* Status bar */
+.qb-status {
+    background: #aaaaaa;
+    color: #000000;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    padding: 1px 8px;
+    display: flex;
+    gap: 16px;
+    flex-shrink: 0;
+    border-top: 1px solid #555555;
+}
+
+.qb-status-item { flex: 1; }
+.qb-status-item.right { text-align: right; flex: 0; white-space: nowrap; }
+
+/* Output line types in immediate window */
+.qb-out-normal { color: #ffffff; }
+.qb-out-error  { color: #ff5555; }
+.qb-out-input  { color: #55ffff; }
+.qb-out-sys    { color: #55ff55; }
+
+/* Windows 3.11 Style */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    font-family: 'MS Sans Serif', 'Pixelated MS Sans Serif', Arial, sans-serif;
+    font-size: 11px;
+    background-color: #008080;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    cursor: default;
+}
+
+/* ===== DESKTOP ===== */
+#desktop {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background: #008080;
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 1px,
+            rgba(0,0,0,0.03) 1px,
+            rgba(0,0,0,0.03) 2px
+        );
+}
+
+/* ===== TASKBAR ===== */
+
+/* ===== DESKTOP ICONS ===== */
+.desktop-icon {
+    position: absolute;
+    width: 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.desktop-icon:hover .icon-img {
+    opacity: 0.85;
+}
+
+.desktop-icon.selected .icon-label {
+    background: #000080;
+    color: #ffffff;
+    outline: 1px dotted #ffffff;
+}
+
+.desktop-icon.selected .icon-img {
+    filter: brightness(0.7) sepia(1) hue-rotate(180deg) saturate(3);
+}
+
+.icon-img {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+}
+
+.icon-label {
+    color: #ffffff;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.2;
+    padding: 1px 2px;
+    word-break: break-word;
+    text-shadow: 1px 1px 0 #000000;
+    width: 100%;
+}
+
+/* ===== WINDOWS ===== */
+.win-window {
+    position: absolute;
+    background: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    box-shadow: 2px 2px 0 #000000;
+    min-width: 200px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+.win-window.minimized {
+    display: none;
+}
+
+.win-window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 28px) !important;
+}
+
+/* Title Bar */
+.title-bar {
+    background: linear-gradient(to right, #000080, #1084d0);
+    padding: 2px 2px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: move;
+    flex-shrink: 0;
+}
+
+.win-window:not(.focused) .title-bar {
+    background: #808080;
+}
+
+.title-bar-text {
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    flex: 1;
+    padding-left: 2px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.title-bar-icon {
+    width: 16px;
+    height: 16px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+}
+
+/* Title Bar Buttons */
+.title-btn {
+    width: 16px;
+    height: 14px;
+    background: #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 9px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.title-btn:active {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+}
+
+/* Menu Bar */
+.menu-bar {
+    background: #c0c0c0;
+    border-bottom: 1px solid #808080;
+    padding: 1px 2px;
+    display: flex;
+    flex-shrink: 0;
+}
+
+.menu-item {
+    padding: 2px 8px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.menu-item:hover, .menu-item.active {
+    background: #000080;
+    color: #ffffff;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: fixed;
+    background: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    box-shadow: 2px 2px 0 #000000;
+    z-index: 10000;
+    min-width: 140px;
+    display: none;
+}
+
+.dropdown-menu.visible {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 3px 20px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: #000080;
+    color: #ffffff;
+}
+
+.dropdown-separator {
+    height: 1px;
+    background: #808080;
+    margin: 2px 0;
+    border-bottom: 1px solid #ffffff;
+}
+
+/* Window Content Area */
+.win-content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #c0c0c0;
+}
+
+/* Status Bar */
+.status-bar {
+    border-top: 2px solid #808080;
+    padding: 2px 4px;
+    font-size: 11px;
+    flex-shrink: 0;
+    display: flex;
+    gap: 4px;
+}
+
+.status-panel {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    padding: 1px 4px;
+    flex: 1;
+}
+
+/* ===== PROGRAM MANAGER ===== */
+#program-manager .win-content {
+    padding: 4px;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    overflow-y: auto;
+}
+
+.program-group {
+    width: 80px;
+    margin: 4px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.program-group:hover .group-icon,
+.program-group.selected .group-icon {
+    outline: 1px dotted #000000;
+}
+
+.group-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    image-rendering: pixelated;
+}
+
+.group-label {
+    font-size: 11px;
+    text-align: center;
+    color: #000000;
+}
+
+/* ===== NOTEPAD ===== */
+#notepad-app .win-content {
+    padding: 0;
+}
+
+#notepad-textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    background: #ffffff;
+    padding: 4px;
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    flex: 1;
+}
+
+/* ===== FILE MANAGER ===== */
+#file-manager .win-content {
+    padding: 2px;
+}
+
+.file-manager-toolbar {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    border-bottom: 1px solid #808080;
+    flex-shrink: 0;
+}
+
+.toolbar-btn {
+    background: #c0c0c0;
+    border-top: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    padding: 2px 8px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.toolbar-btn:active {
+    border-top: 1px solid #808080;
+    border-left: 1px solid #808080;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+}
+
+.file-manager-panes {
+    display: flex;
+    flex: 1;
+    gap: 2px;
+    padding: 2px;
+    overflow: hidden;
+}
+
+.file-pane {
+    flex: 1;
+    background: #ffffff;
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    overflow-y: auto;
+    padding: 2px;
+}
+
+.file-entry {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.file-entry:hover {
+    background: #000080;
+    color: #ffffff;
+}
+
+.file-entry.fm-selected {
+    background: #000080;
+    color: #ffffff;
+}
+
+.file-entry-icon {
+    font-size: 14px;
+}
+
+/* ===== CALCULATOR ===== */
+#calculator-app .win-content {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: #c0c0c0;
+}
+
+.calc-display {
+    background: #ffffff;
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    padding: 4px 8px;
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.calc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+}
+
+.calc-btn {
+    background: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    padding: 4px 0;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    min-width: 36px;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calc-btn:active {
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+.calc-btn.operator {
+    background: #bdbdbd;
+}
+
+.calc-btn.equals {
+    background: #bdbdbd;
+}
+
+/* ===== ABOUT DIALOG ===== */
+#about-dialog .win-content {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: #c0c0c0;
+}
+
+.about-logo {
+    font-size: 48px;
+    margin-bottom: 4px;
+}
+
+.about-title {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.about-text {
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.about-divider {
+    width: 100%;
+    height: 1px;
+    background: #808080;
+    border-bottom: 1px solid #ffffff;
+}
+
+.dialog-btn-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.dialog-btn {
+    background: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    padding: 4px 20px;
+    font-size: 11px;
+    cursor: pointer;
+    min-width: 75px;
+    text-align: center;
+}
+
+.dialog-btn:active {
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+.dialog-btn.default {
+    outline: 1px solid #000000;
+    outline-offset: -4px;
+}
+
+/* ===== RESIZE HANDLES (8 directions) ===== */
+.win-window { overflow: visible; }
+
+.rh {
+    position: absolute;
+    z-index: 20;
+}
+
+/* Edges */
+.rh-n  { top: -4px;    left: 8px;    right: 8px;   height: 8px;  cursor: n-resize; }
+.rh-s  { bottom: -4px; left: 8px;    right: 8px;   height: 8px;  cursor: s-resize; }
+.rh-e  { right: -4px;  top: 8px;     bottom: 8px;  width: 8px;   cursor: e-resize; }
+.rh-w  { left: -4px;   top: 8px;     bottom: 8px;  width: 8px;   cursor: w-resize; }
+
+/* Corners */
+.rh-ne { top: -4px;    right: -4px;  width: 12px;  height: 12px; cursor: ne-resize; }
+.rh-se { bottom: -4px; right: -4px;  width: 12px;  height: 12px; cursor: se-resize; }
+.rh-sw { bottom: -4px; left: -4px;   width: 12px;  height: 12px; cursor: sw-resize; }
+.rh-nw { top: -4px;    left: -4px;   width: 12px;  height: 12px; cursor: nw-resize; }
+
+/* ===== MS-DOS TERMINAL ===== */
+#msdos-app .win-content {
+    background: #000000;
+    padding: 0;
+    overflow: hidden;
+    cursor: text;
+}
+
+#dos-screen {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 8px 4px;
+    color: #c0c0c0;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 13px;
+    line-height: 1.35;
+    white-space: pre-wrap;
+    word-break: break-all;
+    background: #000000;
+}
+
+#dos-screen::-webkit-scrollbar { width: 12px; }
+#dos-screen::-webkit-scrollbar-track { background: #000000; }
+#dos-screen::-webkit-scrollbar-thumb { background: #808080; }
+
+/* Individual line types */
+#dos-screen div { min-height: 1.35em; }
+
+.dos-error { color: #ff5555; }
+
+/* The live input line: prompt + typed text + blinking cursor */
+#dos-current-line { white-space: pre-wrap; }
+
+.dos-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1em;
+    background: #c0c0c0;
+    vertical-align: text-bottom;
+    animation: dos-blink 1s step-end infinite;
+}
+
+@keyframes dos-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* ===== SCROLLBAR STYLES ===== */
+::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: #c0c0c0;
+    border: 1px solid #808080;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+}
+
+::-webkit-scrollbar-button {
+    background: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    width: 16px;
+    height: 16px;
+}
+
+/* ===== START MENU ===== */
+
