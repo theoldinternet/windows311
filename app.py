@@ -45,6 +45,15 @@ def _init_db():
                 code      TEXT    NOT NULL,
                 output    TEXT
             );
+            CREATE TABLE IF NOT EXISTS ip_log (
+                id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                ip         TEXT    NOT NULL,
+                first_seen TEXT    NOT NULL,
+                last_seen  TEXT    NOT NULL,
+                hits       INTEGER NOT NULL DEFAULT 1,
+                user_agent TEXT,
+                UNIQUE(ip)
+            );
         ''')
 
 _init_db()
@@ -56,9 +65,24 @@ def _client_ip() -> str:
         return forwarded.split(',')[0].strip()
     return request.remote_addr or '0.0.0.0'
 
+def _log_ip():
+    ip = _client_ip()
+    ua = request.headers.get('User-Agent', '')
+    now = datetime.datetime.utcnow().isoformat()
+    with _db() as conn:
+        conn.execute('''
+            INSERT INTO ip_log (ip, first_seen, last_seen, hits, user_agent)
+            VALUES (?, ?, ?, 1, ?)
+            ON CONFLICT(ip) DO UPDATE SET
+                last_seen  = excluded.last_seen,
+                hits       = hits + 1,
+                user_agent = excluded.user_agent
+        ''', (ip, now, now, ua))
+
 def _check_ip_session():
     """Abort if the session belongs to a different IP than the current request."""
     ip = _client_ip()
+    _log_ip()
     if 'ip' not in session:
         session['ip'] = ip
     elif session['ip'] != ip:
@@ -1186,13 +1210,15 @@ def dos_command():
     if not cwd.upper().startswith('C:\\'):
         cwd = 'C:\\'
 
-    output, new_cwd, clear, exit_shell, meta = run_dos_command(command, cwd)
-
-    with _db() as conn:
-        conn.execute(
-            'INSERT INTO dos_log (ts, ip, command, cwd, output) VALUES (?,?,?,?,?)',
-            (datetime.datetime.utcnow().isoformat(), _client_ip(), command, cwd, output)
-        )
+    output, new_cwd, clear, exit_shell, meta = '', cwd, False, False, {}
+    try:
+        output, new_cwd, clear, exit_shell, meta = run_dos_command(command, cwd)
+    finally:
+        with _db() as conn:
+            conn.execute(
+                'INSERT INTO dos_log (ts, ip, command, cwd, output) VALUES (?,?,?,?,?)',
+                (datetime.datetime.utcnow().isoformat(), _client_ip(), command, cwd, output)
+            )
 
     return jsonify({'output': output, 'cwd': new_cwd, 'clear': clear, 'exit': exit_shell, 'meta': meta})
 
