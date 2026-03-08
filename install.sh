@@ -39,6 +39,7 @@ install_packages() {
     apt-get install -y --no-install-recommends \
         python3 python3-venv python3-pip \
         nginx \
+        certbot python3-certbot-nginx \
         curl
     ok "System packages ready."
 }
@@ -143,6 +144,29 @@ EOF
     ok "Nginx configured and reloaded."
 }
 
+# ── 5. Let's Encrypt HTTPS ────────────────────────────────────────────────────
+_is_real_domain() {
+    # Returns true if SERVER_NAME looks like a hostname (not _ or a bare IP)
+    [[ "$SERVER_NAME" != "_" ]] && \
+    [[ ! "$SERVER_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
+}
+
+enable_https() {
+    if ! _is_real_domain; then
+        info "Skipping HTTPS — no domain name provided."
+        return
+    fi
+
+    info "Requesting Let's Encrypt certificate for $SERVER_NAME ..."
+    certbot --nginx \
+        --non-interactive \
+        --agree-tos \
+        --redirect \
+        --email "admin@${SERVER_NAME#*.}" \
+        -d "$SERVER_NAME"
+    ok "HTTPS enabled. Certificate will auto-renew via certbot's systemd timer."
+}
+
 # ── main ──────────────────────────────────────────────────────────────────────
 main() {
     require_root
@@ -155,6 +179,7 @@ main() {
     setup_venv
     create_service
     create_nginx_config
+    enable_https
 
     echo
     ok "Installation complete!"
@@ -162,8 +187,6 @@ main() {
     echo "  App logs:   journalctl -u ${SERVICE_NAME} -f"
     echo "  Access log: /var/log/${SERVICE_NAME}/access.log"
     echo "  Error log:  /var/log/${SERVICE_NAME}/error.log"
-    echo
-    echo "  To enable HTTPS: sudo certbot --nginx -d ${SERVER_NAME}"
 }
 
 main "$@"
