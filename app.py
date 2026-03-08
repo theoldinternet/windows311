@@ -36,6 +36,15 @@ def _init_db():
                 path      TEXT    NOT NULL,
                 content   TEXT    NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS qbasic_log (
+                id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts        TEXT    NOT NULL,
+                ip        TEXT    NOT NULL,
+                event     TEXT    NOT NULL,
+                filename  TEXT,
+                code      TEXT    NOT NULL,
+                output    TEXT
+            );
         ''')
 
 _init_db()
@@ -1200,6 +1209,7 @@ def _qbasic_sid():
 
 @app.route('/api/qbasic/run', methods=['POST'])
 def qbasic_run():
+    _check_ip_session()
     data   = request.json
     code   = data.get('code', '')
     inputs = data.get('inputs', [])
@@ -1210,9 +1220,20 @@ def qbasic_run():
         interp.load(code)
         lines = interp.run(inputs)
     except InputNeeded as e:
+        with _db() as conn:
+            conn.execute(
+                'INSERT INTO qbasic_log (ts, ip, event, code, output) VALUES (?,?,?,?,?)',
+                (datetime.datetime.utcnow().isoformat(), _client_ip(), 'run', code, '\n'.join(interp.output_lines))
+            )
         return jsonify({'output': interp.output_lines, 'needs_input': True, 'prompt': e.prompt})
     except Exception as e:
         return jsonify({'output': interp.output_lines + [f'*** Internal error: {e}'], 'needs_input': False})
+
+    with _db() as conn:
+        conn.execute(
+            'INSERT INTO qbasic_log (ts, ip, event, code, output) VALUES (?,?,?,?,?)',
+            (datetime.datetime.utcnow().isoformat(), _client_ip(), 'run', code, '\n'.join(lines))
+        )
 
     # Store interpreter state for immediate window use
     _interp_pool[sid] = interp
@@ -1221,6 +1242,7 @@ def qbasic_run():
 
 @app.route('/api/qbasic/immediate', methods=['POST'])
 def qbasic_immediate():
+    _check_ip_session()
     data  = request.json
     stmt  = data.get('stmt', '')
     inputs= data.get('inputs', [])
@@ -1239,6 +1261,7 @@ def qbasic_immediate():
 
 @app.route('/api/qbasic/reset', methods=['POST'])
 def qbasic_reset():
+    _check_ip_session()
     sid = request.json.get('sid', 'default')
     _interp_pool.pop(sid, None)
     return jsonify({'ok': True})
@@ -1246,6 +1269,7 @@ def qbasic_reset():
 
 @app.route('/api/qbasic/load')
 def qbasic_load():
+    _check_ip_session()
     filename = request.args.get('file', '')
     if not filename:
         return jsonify({'error': 'No filename'}), 400
@@ -1264,6 +1288,7 @@ def qbasic_load():
 
 @app.route('/api/qbasic/save', methods=['POST'])
 def qbasic_save():
+    _check_ip_session()
     data     = request.json
     code     = data.get('code', '')
     filename = os.path.basename(data.get('filename', 'UNTITLED.BAS')).upper()
@@ -1272,6 +1297,12 @@ def qbasic_save():
     path = os.path.join(QBASIC_DIR, filename)
     with open(path, 'w') as f:
         f.write(code)
+
+    with _db() as conn:
+        conn.execute(
+            'INSERT INTO qbasic_log (ts, ip, event, filename, code) VALUES (?,?,?,?,?)',
+            (datetime.datetime.utcnow().isoformat(), _client_ip(), 'save', filename, code)
+        )
     return jsonify({'ok': True, 'filename': filename, 'path': 'C:\\QBASIC\\' + filename})
 
 
