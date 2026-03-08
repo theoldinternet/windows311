@@ -673,7 +673,7 @@ def run_dos_command(raw: str, dos_cwd: str):
         if target is None:
             return R('Access denied.')
         src_dir  = os.path.dirname(target) if not os.path.isdir(target) else target
-        pattern  = os.path.basename(target_arg).upper() if not os.path.isdir(target) else '*'
+        pattern  = os.path.basename(target).upper() if not os.path.isdir(target) else '*'
 
         if 'S' in flags:
             # Delete matching files in all subdirs
