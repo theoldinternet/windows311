@@ -1,13 +1,59 @@
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask, render_template, jsonify, request, session, abort
 import datetime
 import os
 import shutil
 import fnmatch
 import stat
+import sqlite3
 from basic_interp import BASICInterpreter, InputNeeded, BASICError
 
 app = Flask(__name__)
 app.secret_key = 'qbasic-windows311'
+
+# ── Honeypot DB ───────────────────────────────────────────────────────────────
+DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'honeypot.db')
+
+def _db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def _init_db():
+    with _db() as conn:
+        conn.executescript('''
+            CREATE TABLE IF NOT EXISTS dos_log (
+                id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts        TEXT    NOT NULL,
+                ip        TEXT    NOT NULL,
+                command   TEXT    NOT NULL,
+                cwd       TEXT    NOT NULL,
+                output    TEXT
+            );
+            CREATE TABLE IF NOT EXISTS notepad_log (
+                id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                ts        TEXT    NOT NULL,
+                ip        TEXT    NOT NULL,
+                path      TEXT    NOT NULL,
+                content   TEXT    NOT NULL
+            );
+        ''')
+
+_init_db()
+
+def _client_ip() -> str:
+    """Return the real client IP, respecting X-Forwarded-For from nginx."""
+    forwarded = request.headers.get('X-Forwarded-For')
+    if forwarded:
+        return forwarded.split(',')[0].strip()
+    return request.remote_addr or '0.0.0.0'
+
+def _check_ip_session():
+    """Abort if the session belongs to a different IP than the current request."""
+    ip = _client_ip()
+    if 'ip' not in session:
+        session['ip'] = ip
+    elif session['ip'] != ip:
+        abort(403)
 
 # ── QBasic interpreter pool (one per "session" — keyed by session token) ──────
 _interp_pool: dict[str, BASICInterpreter] = {}
@@ -1055,6 +1101,7 @@ def get_time():
 
 @app.route('/api/fs/list')
 def fs_list():
+    _check_ip_session()
     dos_path = request.args.get('path', 'C:\\')
     real = _resolve_absolute(dos_path)
     if real is None or not os.path.isdir(real):
@@ -1085,6 +1132,7 @@ def fs_list():
 
 @app.route('/api/fs/read')
 def fs_read():
+    _check_ip_session()
     dos_path = request.args.get('path', '')
     real = _resolve_absolute(dos_path)
     if real is None or not os.path.isfile(real):
@@ -1099,6 +1147,7 @@ def fs_read():
 
 @app.route('/api/fs/write', methods=['POST'])
 def fs_write():
+    _check_ip_session()
     data     = request.json
     dos_path = data.get('path', '').strip()
     content  = data.get('content', '')
@@ -1108,10 +1157,18 @@ def fs_write():
     os.makedirs(os.path.dirname(real), exist_ok=True)
     with open(real, 'w', newline='') as f:
         f.write(content)
+
+    with _db() as conn:
+        conn.execute(
+            'INSERT INTO notepad_log (ts, ip, path, content) VALUES (?,?,?,?)',
+            (datetime.datetime.utcnow().isoformat(), _client_ip(), dos_path, content)
+        )
+
     return jsonify({'status': 'saved', 'path': _to_dos_path(real)})
 
 @app.route('/api/dos', methods=['POST'])
 def dos_command():
+    _check_ip_session()
     data    = request.json
     command = data.get('command', '').strip()
     cwd     = data.get('cwd', 'C:\\')
@@ -1121,6 +1178,13 @@ def dos_command():
         cwd = 'C:\\'
 
     output, new_cwd, clear, exit_shell, meta = run_dos_command(command, cwd)
+
+    with _db() as conn:
+        conn.execute(
+            'INSERT INTO dos_log (ts, ip, command, cwd, output) VALUES (?,?,?,?,?)',
+            (datetime.datetime.utcnow().isoformat(), _client_ip(), command, cwd, output)
+        )
+
     return jsonify({'output': output, 'cwd': new_cwd, 'clear': clear, 'exit': exit_shell, 'meta': meta})
 
 # ── QBasic routes ─────────────────────────────────────────────────────────────
