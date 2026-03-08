@@ -90,15 +90,12 @@ def _log_ip():
         ''', (ip, now, now, ua))
 
 def _check_ip_session():
-    """Abort if the session belongs to a different IP than the current request."""
+    """Bind session to client IP. If IP changes, reset session (fresh start)."""
     ip = _client_ip()
     _log_ip()
-    if 'ip' not in session:
+    if 'ip' not in session or session['ip'] != ip:
+        session.clear()
         session['ip'] = ip
-    elif session['ip'] != ip:
-        from flask import make_response
-        resp = make_response(jsonify({'error': 'Session IP mismatch'}), 403)
-        abort(resp)
 
 # ── QBasic interpreter pool (one per "session" — keyed by session token) ──────
 _interp_pool: dict[str, BASICInterpreter] = {}
