@@ -982,8 +982,8 @@ def run_dos_command(raw: str, dos_cwd: str):
             'No deleted files were found.'
         )
 
-    # ── EDIT ─────────────────────────────────────────────────────────────────
-    if cmd == 'EDIT':
+    # ── EDIT / NOTEPAD ───────────────────────────────────────────────────────
+    if cmd in ('EDIT', 'NOTEPAD', 'NOTEPAD.EXE'):
         if not args:
             return R(meta={'edit': None})
         target = _resolve(dos_cwd, args)
